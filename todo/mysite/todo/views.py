@@ -55,13 +55,3 @@ class TodoSearch(APIView):
 			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date=datetime.datetime.now().date())})
 		else:
 			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date__lte=datetime.datetime.now().date())})
-# def index(request):
-# 	todo_list = Todo.objects.all()
-# 	for i in todo_list:
-# 		due_time = i.due_date
-# 		if (due_time) > datetime.datetime.now().date():
-# 			return render(request, 'todo/home.html', {'title': i.title, 'description':i.description,'pending':'Pending'})
-# 		else:
-# 			return render(request, 'todo/home.html', {'title': i.title, 'description':i.description,'complete':'Complete'})
-
-	#return render(request, 'todo/home.html', {'todo': todo_list })
