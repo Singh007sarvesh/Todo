@@ -16,10 +16,13 @@ class TodoListAPITest(TestCase):
 	def test_todolist(self):
 		client = APIClient()
 		data = Todo(title = 'abc', description = 'xyz', due_date = '2018-11-13')
-		# response = client.post('/api/todos/', data)
-		# self.assertEquals(response.status_code,201)
+
+		response = client.post('/api/todos/',{'todotitle':'abc','desc':'xyz','date':'2018-11-13'})
+		self.assertEquals(response.status_code,302)
+		due_time = '2018-11-13'
 		response = client.get('/api/todos/')
 		self.assertEquals(response.status_code, 200)
+		Todo.objects.filter(due_date=due_time).delete()
 
 
 class TodoSearchAPITest(TestCase):
@@ -43,5 +46,5 @@ class TodoSearchAPITest(TestCase):
 		days = 'today'
 		if days == "today":
 			data = Todo.objects.filter(due_date='2018-11-13')
-			response = client.get('/api/todos/?/', data)
+			response = client.get('/api/todos/?/')
 			self.assertEquals(response.status_code,200)
