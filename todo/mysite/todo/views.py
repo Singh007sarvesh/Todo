@@ -41,17 +41,89 @@ class TodoSearch(APIView):
 		todo_search = request.GET['todo_search']
 		todo_list = Todo.objects.filter(title = todo_search)
 		if todo_search:
-			return render(request, 'todo/home.html', {'todo_search_list': todo_list})
+			return render(
+			request, 'todo/home.html', {'todo_search_list': todo_list})
 
 	def post(self,request):
 		days = request.POST['week']
 		if days == "today":
-			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date=datetime.datetime.now().date())})
+			return render(
+			request, 'todo/home.html', {'today': Todo.objects.filter(
+			due_date=datetime.datetime.now().date())})
 		elif days == 'week':
-			print(datetime.datetime.now().date())
-			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date=datetime.datetime.now().date())})
+			day = 0
+			diff_day = 0
+			cur_date = str(datetime.datetime.now().date())
+			days_ = datetime.datetime.strptime(cur_date, '%Y-%m-%d').strftime('%A')
+			if days_ == 'Monday':
+				day = 7
+				diff_day = 0
+			elif days_ == 'Tuesday':
+				day = 6
+				diff_day = 1
+			elif days_ == 'Wednesday':
+				day = 5
+				diff_day = 2
+			elif days_ == 'Thursday':
+				day = 4
+				diff_day = 3
+			
+			elif days_ == 'Friday':
+				day = 3
+				diff_day = 4
+			elif days_ == 'Saturday':
+				day = 2
+				diff_day = 5
+			elif days_ == 'Sunday':
+				day = 1
+				diff_day = 6
+			total_days_gt = datetime.datetime.now().date() + timedelta(days=day)
+			total_days_ls = datetime.datetime.now().date() - timedelta(days=diff_day)
+			return render(
+			request, 'todo/home.html', {'today': Todo.objects.filter(
+			due_date__lte=total_days_gt,due_date__gte=total_days_ls)})
 		elif days == 'next_week':
-			print(datetime.datetime.now().date())
-			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date=datetime.datetime.now().date())})
+			day = 0
+			cur_date = str(datetime.datetime.now().date())
+			days_ = datetime.datetime.strptime(cur_date, '%Y-%m-%d').strftime('%A')
+			if days_ == 'Monday':
+				day = 7
+			elif days_ == 'Tuesday':
+				day = 6
+			elif days_ == 'Wednesday':
+				day = 5
+			elif days_ == 'Thursday':
+				day = 4
+			
+			elif days_ == 'Friday':
+				day = 3
+			elif days_ == 'Saturday':
+				day = 2
+			elif days_ == 'Sunday':
+				day = 1
+			total_days_gt = datetime.datetime.now().date() + timedelta(days=day)
+			return render(
+			request, 'todo/home.html', {'today': Todo.objects.filter(
+			due_date__gte=total_days_gt)})
+		else:
+			return render(
+			request, 'todo/home.html', {'today': Todo.objects.filter(
+			due_date__lte=datetime.datetime.now().date())})
+			elif days_ == 'Tuesday':
+				day = 6
+			elif days_ == 'Wednesday':
+				day = 5
+			elif days_ == 'Thursday':
+				day = 4
+			
+			elif days_ == 'Friday':
+				day = 3
+			elif days_ == 'Saturday':
+				day = 2
+			elif days_ == 'Sunday':
+				day = 1
+			total_days_gt = datetime.datetime.now().date() - timedelta(days=day)
+			return render(
+			request, 'todo/home.html', {'today': Todo.objects.filter(due_date__gte=total_days_gt)})
 		else:
 			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date__lte=datetime.datetime.now().date())})
