@@ -109,21 +109,4 @@ class TodoSearch(APIView):
 			return render(
 			request, 'todo/home.html', {'today': Todo.objects.filter(
 			due_date__lte=datetime.datetime.now().date())})
-			elif days_ == 'Tuesday':
-				day = 6
-			elif days_ == 'Wednesday':
-				day = 5
-			elif days_ == 'Thursday':
-				day = 4
-			
-			elif days_ == 'Friday':
-				day = 3
-			elif days_ == 'Saturday':
-				day = 2
-			elif days_ == 'Sunday':
-				day = 1
-			total_days_gt = datetime.datetime.now().date() - timedelta(days=day)
-			return render(
-			request, 'todo/home.html', {'today': Todo.objects.filter(due_date__gte=total_days_gt)})
-		else:
-			return render(request, 'todo/home.html', {'today': Todo.objects.filter(due_date__lte=datetime.datetime.now().date())})
+
