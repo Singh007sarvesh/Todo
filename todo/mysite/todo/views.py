@@ -32,8 +32,14 @@ class TodoList(APIView):
 		todo_title = request.POST['todotitle']
 		desc = request.POST['desc']
 		date = request.POST['date']
+		dict_data = {'title':todo_title,'description':desc,'due_date':date}
+		serializer = TodoSerialize(data=dict_data)
+		print(serializer)
 		data = Todo(title = todo_title, description = desc, due_date = date)
-		data.save()
+		if serializer.is_valid():
+			serializer.save()
+            #return Response(serializer.data, status=status.HTTP_201_CREATED)
+		#data.save()
 		return redirect('addTodo')
 
 class TodoSearch(APIView):
